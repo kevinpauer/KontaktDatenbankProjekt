@@ -5,7 +5,9 @@ import objectClasses.Ort;
 import objectClasses.Person;
 
 import java.io.*;
+import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -72,7 +74,7 @@ public class ReadFile {
         String[] lineSplit;
         int entity = 0;
         DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+                DateTimeFormatter.ofPattern("[yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm]", Locale.ENGLISH);
 
         try {
             Scanner scanner = new Scanner(f);
