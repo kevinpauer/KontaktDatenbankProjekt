@@ -14,6 +14,10 @@ public class Besuche {
         this.location_id = location_id;
     }
 
+    public boolean isOverlapping(LocalDateTime start, LocalDateTime end) {
+        return ((null == end) || this.start_Date.isBefore(end)) && ((null == this.end_Date) || start.isBefore(this.end_Date));
+    }
+
     public LocalDateTime getStart_Date() {
         return start_Date;
     }

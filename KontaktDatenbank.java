@@ -37,17 +37,20 @@ public class KontaktDatenbank {
                 ArrayList<Person> resultKontaktpersonen = SearchFunctionality.searchKontaktpersonen(Integer.parseInt(args[0].split("=")[1]), PersonenArray, BesucheArray, OrteArray);
                 for(i = 0; i < resultKontaktpersonen.size(); ++i) {
                     if (i == resultKontaktpersonen.size() - 1) {
-                        System.out.print(((Person)resultKontaktpersonen.get(i)).getPerson_name() + ", ");
+                        System.out.print(((Person)resultKontaktpersonen.get(i)).getPerson_name());
                     } else {
                         System.out.print(((Person)resultKontaktpersonen.get(i)).getPerson_name() + ", ");
                     }
                 }
             } else if ("--besucher".equals(args[0].split("=")[0])) {
-                ArrayList<Person> resultBesucher = SearchFunctionality.searchBesucher(Integer.parseInt(args[0].split("=")[1].split(",")[0]), args[0].split("=")[1].split(",")[1], PersonenArray, BesucheArray, OrteArray);
+                ArrayList<Person> resultBesucher = SearchFunctionality.searchBesucher(
+                        Integer.parseInt(args[0].split("=")[1].split(",")[0]),
+                        args[0].split("=")[1].split(",")[1], PersonenArray,
+                        BesucheArray, OrteArray);
                 for(i = 0; i < resultBesucher.size(); ++i) {
                     for(i = 0; i < resultBesucher.size(); ++i) {
                         if (i == resultBesucher.size() - 1) {
-                            System.out.print(((Person)resultBesucher.get(i)).getPerson_name() + ", ");
+                            System.out.print(((Person)resultBesucher.get(i)).getPerson_name());
                         } else {
                             System.out.print(((Person)resultBesucher.get(i)).getPerson_name() + ", ");
                         }

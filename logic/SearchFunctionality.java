@@ -53,6 +53,16 @@ public class SearchFunctionality {
         return null;
     }
 
+    public static ArrayList<Person> removeDuplicates(ArrayList<Person> list){
+        ArrayList<Person> newList = new ArrayList<>();
+        for (Person element: list){
+            if (!newList.contains(element)){
+                newList.add(element);
+            }
+        }
+        return newList;
+    }
+
     public static ArrayList<Person> searchKontaktpersonen(int personenId, ArrayList<Person> personDataArray, ArrayList<Besuche> alleBesucheDataArray, ArrayList<Ort> orteDataArray) {
         ArrayList<Person> resultArray = new ArrayList<>();
         ArrayList<Besuche> besuchteOrte = new ArrayList<>();
@@ -68,19 +78,15 @@ public class SearchFunctionality {
             return resultArray;
         } else {
             for (int i = 0; i < besuchteOrte.size(); i++) {
-                int idOfVisitedPlace = besuchteOrte.get(i).getLocation_id();
                 //checks if location is indoors
-                if (searchIfOrtIsInDoors(idOfVisitedPlace, orteDataArray)) {
+                if (searchIfOrtIsInDoors(besuchteOrte.get(i).getLocation_id(), orteDataArray)) {
                     for (int j = 0; j < alleBesucheDataArray.size(); j++) {
                         //checks if two people have the same location
-                        if (alleBesucheDataArray.get(j).getLocation_id() == alleBesucheDataArray.get(i).getLocation_id()) {
-                            int faengtDavorAn = alleBesucheDataArray.get(j).getStart_Date().compareTo(besuchteOrte.get(i).getStart_Date()) * (-1);
-                            int hoertDavorAuf = alleBesucheDataArray.get(j).getEnd_Date().compareTo(besuchteOrte.get(i).getStart_Date()) * (-1);
-                            int faengtDanachAn = alleBesucheDataArray.get(j).getStart_Date().compareTo(besuchteOrte.get(i).getEnd_Date());
-                            int hoertDanachAuf = alleBesucheDataArray.get(j).getEnd_Date().compareTo(besuchteOrte.get(i).getEnd_Date());
-                            //checks if there is a overlap
-                            if (!((faengtDavorAn > 0 && hoertDavorAuf > 0) || (faengtDanachAn > 0 && hoertDanachAuf > 0))) {
-                                resultArray.add(searchPersonByID(alleBesucheDataArray.get(j).getPerson_id(), personDataArray));
+                        if (alleBesucheDataArray.get(j).getLocation_id() == besuchteOrte.get(i).getLocation_id()) {
+                            if (besuchteOrte.get(i).isOverlapping(alleBesucheDataArray.get(j).getStart_Date(), alleBesucheDataArray.get(j).getEnd_Date())){
+                                if (alleBesucheDataArray.get(j).getPerson_id() != personenId){
+                                    resultArray.add(searchPersonByID(alleBesucheDataArray.get(j).getPerson_id(), personDataArray));
+                                }
                             }
                         }
                     }
@@ -93,7 +99,7 @@ public class SearchFunctionality {
                 return o1.getPerson_name().compareTo(o2.getPerson_name());
             }
         });
-
+        resultArray = removeDuplicates(resultArray);
         return resultArray;
     }
 
@@ -104,24 +110,27 @@ public class SearchFunctionality {
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
 
-        LocalDateTime timeFromInput = LocalDateTime.parse(timeInput, formatter);
+        LocalDateTime timeFromInput = LocalDateTime.parse(timeInput.replaceAll("^\"+|\"+$", ""), formatter);
 
         for (int i = 0; i < alleBesucheDataArray.size(); i++) {
             //checks if id is present in orteArray
             if (ortId == alleBesucheDataArray.get(i).getLocation_id()) {
                 //checks if both ids are indoor
+                System.out.println(ortId);
+                System.out.println(orteDataArray.get(i).getLocation_id());
                 if (searchIfOrtIsInDoors(ortId, orteDataArray) && searchIfOrtIsInDoors(orteDataArray.get(i).getLocation_id(), orteDataArray)) {
-                    int faengtDavorAn = alleBesucheDataArray.get(i).getStart_Date().compareTo(timeFromInput) * (-1);
-                    int hoertDavorAuf = alleBesucheDataArray.get(i).getEnd_Date().compareTo(timeFromInput) * (-1);
-                    int faengtDanachAn = alleBesucheDataArray.get(i).getStart_Date().compareTo(timeFromInput);
-                    int hoertDanachAuf = alleBesucheDataArray.get(i).getEnd_Date().compareTo(timeFromInput);
-                    //checks if there is a overlap
-                    if (!((faengtDavorAn > 0 && hoertDavorAuf > 0) || (faengtDanachAn > 0 && hoertDanachAuf > 0))) {
+                    if (alleBesucheDataArray.get(i).isOverlapping(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date())){
                         resultArray.add(searchPersonByID(alleBesucheDataArray.get(i).getPerson_id(), personDataArray));
                     }
+//                    if (isOverlapping(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date(), timeFromInput, timeFromInput)) {
+//                        resultArray.add(searchPersonByID(alleBesucheDataArray.get(i).getPerson_id(), personDataArray));
+//                    }
                 }
             }
         }
+
+        resultArray = removeDuplicates(resultArray);
+
         return resultArray;
     }
 }
