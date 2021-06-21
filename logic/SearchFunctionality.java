@@ -35,7 +35,7 @@ public class SearchFunctionality {
         return resultArray;
     }
 
-    public static boolean searchIfOrtIsInDoors(int id, ArrayList<Ort> dataArray) {
+    private static boolean searchIfOrtIsInDoors(int id, ArrayList<Ort> dataArray) {
         for (Ort ort : dataArray) {
             if (ort.getLocation_id() == id) {
                 return ort.getIn_door().equals("in_door");
@@ -44,7 +44,7 @@ public class SearchFunctionality {
         return false;
     }
 
-    public static Person searchPersonByID(int id, ArrayList<Person> dataArray) {
+    private static Person searchPersonByID(int id, ArrayList<Person> dataArray) {
         for (Person person : dataArray) {
             if (person.getPerson_id() == id) {
                 return person;
@@ -53,7 +53,7 @@ public class SearchFunctionality {
         return null;
     }
 
-    public static ArrayList<Person> removeDuplicates(ArrayList<Person> list){
+    private static ArrayList<Person> removeDuplicates(ArrayList<Person> list){
         ArrayList<Person> newList = new ArrayList<>();
         for (Person element: list){
             if (!newList.contains(element)){
@@ -93,6 +93,7 @@ public class SearchFunctionality {
                 }
             }
         }
+
         resultArray.sort(new Comparator<Person>() {
             @Override
             public int compare(Person o1, Person o2) {
@@ -100,36 +101,52 @@ public class SearchFunctionality {
             }
         });
         resultArray = removeDuplicates(resultArray);
+
         return resultArray;
+    }
+
+    private static boolean isInTimePeriod(LocalDateTime start, LocalDateTime end, LocalDateTime inputTime){
+        return start.isBefore(inputTime) && end.isAfter(inputTime) || end.equals(inputTime)|| start.equals(inputTime);
     }
 
     public static ArrayList<Person> searchBesucher(int ortId, String timeInput, ArrayList<Person> personDataArray,
                                                    ArrayList<Besuche> alleBesucheDataArray, ArrayList<Ort> orteDataArray) {
         ArrayList<Person> resultArray = new ArrayList<>();
+        ArrayList<Person> tempArray = new ArrayList<>();
 
         DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss", Locale.ENGLISH);
+                DateTimeFormatter.ofPattern("[yyyy-MM-dd'T'HH:mm:ss][yyyy-MM-dd'T'HH:mm]", Locale.ENGLISH);
 
         LocalDateTime timeFromInput = LocalDateTime.parse(timeInput.replaceAll("^\"+|\"+$", ""), formatter);
+
+        Besuche besuchZumVergleichen = new Besuche(timeFromInput, timeFromInput, 0, ortId);
 
         for (int i = 0; i < alleBesucheDataArray.size(); i++) {
             //checks if id is present in orteArray
             if (ortId == alleBesucheDataArray.get(i).getLocation_id()) {
                 //checks if both ids are indoor
-                System.out.println(ortId);
-                System.out.println(orteDataArray.get(i).getLocation_id());
-                if (searchIfOrtIsInDoors(ortId, orteDataArray) && searchIfOrtIsInDoors(orteDataArray.get(i).getLocation_id(), orteDataArray)) {
-                    if (alleBesucheDataArray.get(i).isOverlapping(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date())){
+                if (searchIfOrtIsInDoors(ortId, orteDataArray)) {
+                    if (isInTimePeriod(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date(), timeFromInput)){
+                        tempArray = searchKontaktpersonen(alleBesucheDataArray.get(i).getPerson_id(), personDataArray, alleBesucheDataArray, orteDataArray);
+                        resultArray.addAll(tempArray);
                         resultArray.add(searchPersonByID(alleBesucheDataArray.get(i).getPerson_id(), personDataArray));
                     }
-//                    if (isOverlapping(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date(), timeFromInput, timeFromInput)) {
-//                        resultArray.add(searchPersonByID(alleBesucheDataArray.get(i).getPerson_id(), personDataArray));
-//                    }
+                } else {
+                    if (isInTimePeriod(alleBesucheDataArray.get(i).getStart_Date(), alleBesucheDataArray.get(i).getEnd_Date(), timeFromInput)){
+                        resultArray.add(searchPersonByID(alleBesucheDataArray.get(i).getPerson_id(), personDataArray));
+                    }
                 }
             }
         }
 
         resultArray = removeDuplicates(resultArray);
+
+        resultArray.sort(new Comparator<Person>() {
+            @Override
+            public int compare(Person o1, Person o2) {
+                return o1.getPerson_name().compareTo(o2.getPerson_name());
+            }
+        });
 
         return resultArray;
     }

@@ -1,5 +1,6 @@
 package objectClasses;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Besuche {
     private LocalDateTime start_Date;
@@ -48,5 +49,18 @@ public class Besuche {
 
     public void setLocation_id(int location_id) {
         this.location_id = location_id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Besuche besuche = (Besuche) o;
+        return person_id == besuche.person_id && location_id == besuche.location_id && Objects.equals(start_Date, besuche.start_Date) && Objects.equals(end_Date, besuche.end_Date);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(start_Date, end_Date, person_id, location_id);
     }
 }

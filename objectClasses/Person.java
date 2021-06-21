@@ -1,5 +1,7 @@
 package objectClasses;
 
+import java.util.Objects;
+
 public class Person {
     private int person_id;
     private String person_name;
@@ -22,5 +24,18 @@ public class Person {
 
     public void setPerson_name(String person_name) {
         this.person_name = person_name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return person_id == person.person_id && Objects.equals(person_name, person.person_name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(person_id, person_name);
     }
 }
