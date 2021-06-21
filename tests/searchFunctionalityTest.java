@@ -9,12 +9,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Locale;
 
-public class searchPersonTest {
+public class searchFunctionalityTest {
+
+    private final File f = new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db");
 
     @Test
     public void searchPersonTest(){
@@ -24,7 +23,7 @@ public class searchPersonTest {
             expectedPersonArray.add(new Person(4, "Emil"));
         }
 
-        ArrayList<Person> dataArray = ReadFile.returnPerson(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Person> dataArray = ReadFile.returnPerson(f);
 
         ArrayList<Person> resultPersonArray = SearchFunctionality.searchPerson("EmIl", dataArray);
 
@@ -39,7 +38,7 @@ public class searchPersonTest {
             expectedOrtArray.add(new Ort(2, "Großmarkt", "in_door"));
         }
 
-        ArrayList<Ort> dataArray = ReadFile.returnOrt(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Ort> dataArray = ReadFile.returnOrt(f);
 
         ArrayList<Ort> resultOrtArray = SearchFunctionality.searchOrt("MaRkT", dataArray);
 
@@ -55,9 +54,9 @@ public class searchPersonTest {
             expectedPersonArray.add(new Person(3, "Martha"));
         }
 
-        ArrayList<Besuche> dataArrayBesuche = ReadFile.returnBesuch(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
-        ArrayList<Ort> dataArrayOrt = ReadFile.returnOrt(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
-        ArrayList<Person> dataArrayPerson = ReadFile.returnPerson(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Besuche> dataArrayBesuche = ReadFile.returnBesuch(f);
+        ArrayList<Ort> dataArrayOrt = ReadFile.returnOrt(f);
+        ArrayList<Person> dataArrayPerson = ReadFile.returnPerson(f);
 
         ArrayList<Person> resultPersonArray = SearchFunctionality.searchKontaktpersonen(1, dataArrayPerson, dataArrayBesuche, dataArrayOrt);
 
@@ -74,15 +73,11 @@ public class searchPersonTest {
             expectedPersonArray.add(new Person(3, "Martha"));
         }
 
-        ArrayList<Person> dataArrayPerson = ReadFile.returnPerson(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
-        ArrayList<Besuche> dataArrayBesuche = ReadFile.returnBesuch(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
-        ArrayList<Ort> dataArrayOrt = ReadFile.returnOrt(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Person> dataArrayPerson = ReadFile.returnPerson(f);
+        ArrayList<Besuche> dataArrayBesuche = ReadFile.returnBesuch(f);
+        ArrayList<Ort> dataArrayOrt = ReadFile.returnOrt(f);
 
         ArrayList<Person> resultPersonArray = SearchFunctionality.searchBesucher(1, "2021-05-15T15:00:00", dataArrayPerson, dataArrayBesuche, dataArrayOrt);
-
-        for (Person person : resultPersonArray) {
-            System.out.println(person.getPerson_name());
-        }
 
         Assertions.assertArrayEquals(expectedPersonArray.toArray(), resultPersonArray.toArray());
     }

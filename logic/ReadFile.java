@@ -12,6 +12,11 @@ import java.util.*;
 //TODO refactor code, get rid of duplicates
 
 public class ReadFile {
+    /**
+     * Function reads from Database and creates a List of type Person
+     * @param f --> File
+     * @return --> List of type Person
+     */
     public static ArrayList<Person> returnPerson(File f) {
         ArrayList<Person> ListeVonPersonen = new ArrayList<>();
         String[] lineSplit;
@@ -36,6 +41,11 @@ public class ReadFile {
         return ListeVonPersonen;
     }
 
+    /**
+     * Function reads from Database and creates a List of type Ort
+     * @param f --> File
+     * @return --> List of type Ort
+     */
     public static ArrayList<Ort> returnOrt(File f) {
         ArrayList<Ort> ListeVonOrten = new ArrayList<>();
         String[] lineSplit;
@@ -67,8 +77,13 @@ public class ReadFile {
         return ListeVonOrten;
     }
 
+    /**
+     * Function reads from Database and creates a List of type Besuche
+     * @param f --> File
+     * @return --> List of type Besuche
+     */
     public static ArrayList<Besuche> returnBesuch(File f) {
-        ArrayList<Besuche> ListeVonBesuchen = new ArrayList<>();
+        ArrayList<Besuche> listeVonBesuchen = new ArrayList<>();
         String[] lineSplit;
         int entity = 0;
         DateTimeFormatter formatter =
@@ -90,12 +105,12 @@ public class ReadFile {
                             Integer.parseInt(lineSplit[2].replaceAll("^\"+|\"+$", "")),
                             Integer.parseInt(lineSplit[3].replaceAll("^\"+|\"+$", ""))
                     );
-                    ListeVonBesuchen.add(b);
+                    listeVonBesuchen.add(b);
                 }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return ListeVonBesuchen;
+        return listeVonBesuchen;
     }
 }

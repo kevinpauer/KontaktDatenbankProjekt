@@ -15,6 +15,8 @@ import java.util.Locale;
 
 public class inputTest {
 
+    private final File f = new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db");
+
     @Test
     public void returnPersonTest(){
         ArrayList<Person> expectedPersonList = new ArrayList<>();
@@ -25,7 +27,7 @@ public class inputTest {
             expectedPersonList.add(new Person(4, "Emil"));
         }
 
-        ArrayList<Person> resultPersonArray = ReadFile.returnPerson(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Person> resultPersonArray = ReadFile.returnPerson(f);
 
         Assertions.assertArrayEquals(expectedPersonList.toArray(), resultPersonArray.toArray());
     }
@@ -38,7 +40,7 @@ public class inputTest {
             expectedOrtArray.add(new Ort(2, "Großmarkt", "in_door"));
         }
 
-        ArrayList<Ort> resultOrtArray = ReadFile.returnOrt(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Ort> resultOrtArray = ReadFile.returnOrt(f);
 
         Assertions.assertArrayEquals(expectedOrtArray.toArray(), resultOrtArray.toArray());
     }
@@ -58,7 +60,7 @@ public class inputTest {
                     LocalDateTime.parse("2021-05-15T15:15:00", formatter), 3, 1));
         }
 
-        ArrayList<Besuche> resultBesucheArray = ReadFile.returnBesuch(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\tests\\test.db"));
+        ArrayList<Besuche> resultBesucheArray = ReadFile.returnBesuch(f);
 
         Assertions.assertArrayEquals(expectedBesucheArray.toArray(), resultBesucheArray.toArray());
     }

@@ -9,9 +9,11 @@ import java.util.ArrayList;
 public class KontaktDatenbank {
     public static void main(String[] args) {
 
-        ArrayList<Person> PersonenArray = ReadFile.returnPerson(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\Data\\contacts2021.db"));
-        ArrayList<Ort> OrteArray = ReadFile.returnOrt(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\Data\\contacts2021.db"));
-        ArrayList<Besuche> BesucheArray = ReadFile.returnBesuch(new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\Data\\contacts2021.db"));
+        File f = new File("C:\\Users\\kevin\\Documents\\Developement\\Kontaktprojekt\\src\\Data\\contacts2021.db");
+
+        ArrayList<Person> PersonenArray = ReadFile.returnPerson(f);
+        ArrayList<Ort> OrteArray = ReadFile.returnOrt(f);
+        ArrayList<Besuche> BesucheArray = ReadFile.returnBesuch(f);
 
         if (args.length != 0) {
             int i;
