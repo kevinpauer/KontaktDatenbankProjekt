@@ -104,7 +104,7 @@ public class SearchFunctionality {
     }
 
     /**
-     * function adds a person to the return list if:
+     * f unction adds a person to the return list if:
      * 1) person is at the same place, at the same time
      * 2) the visited place is indoors
      * @param personenId identification number of a person

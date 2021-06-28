@@ -18,7 +18,8 @@ public class KontaktDatenbank {
         if (args.length != 0) {
             int i;
             if ("--personensuche".equals(args[0].split("=")[0])) {
-                ArrayList<Person> resultPersonensuche = SearchFunctionality.searchPerson(args[0].split("=")[1], PersonenArray);
+                ArrayList<Person> resultPersonensuche = SearchFunctionality.searchPerson(args[0].split("=")[1],
+                        PersonenArray);
                 for(i = 0; i < resultPersonensuche.size(); ++i) {
                     if (i == resultPersonensuche.size() - 1) {
                         System.out.print((resultPersonensuche.get(i)).getPerson_name());
@@ -36,7 +37,8 @@ public class KontaktDatenbank {
                     }
                 }
             } else if ("--kontaktpersonen".equals(args[0].split("=")[0])) {
-                ArrayList<Person> resultKontaktpersonen = SearchFunctionality.searchKontaktpersonen(Integer.parseInt(args[0].split("=")[1]), PersonenArray, BesucheArray, OrteArray);
+                ArrayList<Person> resultKontaktpersonen = SearchFunctionality.searchKontaktpersonen(
+                        Integer.parseInt(args[0].split("=")[1]), PersonenArray, BesucheArray, OrteArray);
                 for(i = 0; i < resultKontaktpersonen.size(); ++i) {
                     if (i == resultKontaktpersonen.size() - 1) {
                         System.out.print(((Person)resultKontaktpersonen.get(i)).getPerson_name());
